@@ -57,7 +57,7 @@ const CONFIG = {
   // ── 우리의 이야기 ──
   story: {
     title: "우리의 이야기",
-    content: "서로 다른 길을 걷던 두 사람이\n하나의 길을 함께 걷게 되었습니다.\n\n여러분을 소중한 자리에 초대합니다."
+    content: "서로 다른 길을 걷던 두 사람이\n하나의 길을 함께 걷게 되었습니다.\n\n예식 전, 정성껏 준비한\n웰컴 푸드와 드링크를 마련했습니다.\n조금 일찍 오셔서 편안히 즐기시며\n저희의 시작을 함께해 주시면 감사하겠습니다."
   },
 
   // ── 오시는 길 ──
@@ -93,7 +93,7 @@ const CONFIG = {
     enabled: true,
     // Google Apps Script 웹앱 URL을 붙여넣으세요. (설정 방법은 RSVP-SETUP.md 참고)
     // 비워두면 폼은 보이지만 제출 시 미설정 안내가 표시됩니다.
-    endpoint: "",
+    endpoint: "https://script.google.com/macros/s/AKfycbzazmtRB52e53eoBJHFlkzc24KUf-CNY8Sf40BLpkpwXVrx_sA6GV8yf8Cnr_aBBiQYEg/exec",
     title: "참석 의사 전달",
     desc: "예식과 식사가 동시에 진행되어\n귀한 걸음 부족함 없이 모시기 위해\n참석 의사를 미리 전해주시면 감사하겠습니다.",
     askTel: false  // true로 바꾸면 연락처 입력란이 표시됩니다.
