@@ -468,7 +468,7 @@
   function initLocation() {
     const w = CONFIG.wedding;
     $('#locationVenue').textContent = w.venue;
-    $('#locationHall').textContent = w.hall;
+    $('#locationHall').textContent = w.hall || '';
     $('#locationAddress').textContent = w.address;
     $('#locationTel').textContent = w.tel ? `Tel. ${w.tel}` : '';
     $('#locationMapImg').src = 'images/location/1.jpg';
