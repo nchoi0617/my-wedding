@@ -59,6 +59,57 @@
     <div class="photo-modal__counter" id="modalCounter"></div>
   </div>
 
+  <!-- ═══ RSVP Modal (참석 의사 폼) ═══ -->
+  <div id="rsvpModal" class="rsvp-modal" role="dialog" aria-modal="true" aria-labelledby="rsvpModalTitle">
+    <div class="rsvp-modal__sheet">
+      <button class="rsvp-modal__close" id="rsvpModalClose" aria-label="닫기">&times;</button>
+      <h2 class="rsvp-modal__title" id="rsvpModalTitle">참석 의사 전달</h2>
+      <p class="rsvp-modal__desc" id="rsvpModalDesc"></p>
+
+      <form class="rsvp__form" id="rsvpForm" novalidate>
+        <div class="rsvp__field">
+          <span class="rsvp__label">구분</span>
+          <div class="rsvp__toggle" id="rsvpSide" role="group" aria-label="구분 선택">
+            <button type="button" class="rsvp__toggle-btn is-active" data-value="신랑측">신랑측</button>
+            <button type="button" class="rsvp__toggle-btn" data-value="신부측">신부측</button>
+          </div>
+        </div>
+
+        <div class="rsvp__field">
+          <label class="rsvp__label" for="rsvpName">성함</label>
+          <input class="rsvp__input" id="rsvpName" name="name" type="text" placeholder="대표자 성함" autocomplete="name" maxlength="20">
+        </div>
+
+        <div class="rsvp__field rsvp__field--tel" id="rsvpTelField" hidden>
+          <label class="rsvp__label" for="rsvpTel">연락처</label>
+          <input class="rsvp__input" id="rsvpTel" name="tel" type="tel" placeholder="010-0000-0000" autocomplete="tel" inputmode="tel" maxlength="20">
+        </div>
+
+        <div class="rsvp__field">
+          <label class="rsvp__label" for="rsvpCount">참석 인원</label>
+          <input class="rsvp__input" id="rsvpCount" name="count" type="number" min="1" max="99" inputmode="numeric" placeholder="본인 포함 총 인원">
+        </div>
+
+        <div class="rsvp__field">
+          <span class="rsvp__label">식사 여부</span>
+          <div class="rsvp__toggle" id="rsvpMeal" role="group" aria-label="식사 여부 선택">
+            <button type="button" class="rsvp__toggle-btn is-active" data-value="예정">예정</button>
+            <button type="button" class="rsvp__toggle-btn" data-value="안함">안함</button>
+            <button type="button" class="rsvp__toggle-btn" data-value="미정">미정</button>
+          </div>
+        </div>
+
+        <label class="rsvp__consent">
+          <input type="checkbox" id="rsvpConsent" class="rsvp__checkbox">
+          <span class="rsvp__consent-text">개인정보 수집 및 이용에 동의합니다 <em>(필수)</em><br>
+            <small>수집 항목: 성함·참석인원·식사여부 · 보유기간: 예식 종료 시까지</small></span>
+        </label>
+
+        <button type="submit" class="rsvp__submit" id="rsvpSubmit">참석 의사 전달하기</button>
+      </form>
+    </div>
+  </div>
+
   <!-- ═══ Main Content ═══ -->
   <main id="mainContent" class="main-content">
 
@@ -175,56 +226,12 @@
     <!-- ─── RSVP Section (참석 의사) ─── -->
     <section class="section rsvp" id="rsvp">
       <div class="section__inner">
-        <div class="ornament animate-item" data-animate="fade-in">&#9993;</div>
-        <h2 class="section__title animate-item" data-animate="fade-up" id="rsvpTitle">참석 의사 전달</h2>
-        <p class="rsvp__desc animate-item" data-animate="fade-up" id="rsvpDesc"></p>
-
-        <form class="rsvp__form animate-item" data-animate="fade-up" id="rsvpForm" novalidate>
-          <div class="rsvp__field">
-            <span class="rsvp__label">구분</span>
-            <div class="rsvp__toggle" id="rsvpSide" role="group" aria-label="구분 선택">
-              <button type="button" class="rsvp__toggle-btn is-active" data-value="신랑측">신랑측</button>
-              <button type="button" class="rsvp__toggle-btn" data-value="신부측">신부측</button>
-            </div>
-          </div>
-
-          <div class="rsvp__field">
-            <label class="rsvp__label" for="rsvpName">성함</label>
-            <input class="rsvp__input" id="rsvpName" name="name" type="text" placeholder="대표자 성함" autocomplete="name" maxlength="20">
-          </div>
-
-          <div class="rsvp__field rsvp__field--tel" id="rsvpTelField" hidden>
-            <label class="rsvp__label" for="rsvpTel">연락처</label>
-            <input class="rsvp__input" id="rsvpTel" name="tel" type="tel" placeholder="010-0000-0000" autocomplete="tel" inputmode="tel" maxlength="20">
-          </div>
-
-          <div class="rsvp__field">
-            <label class="rsvp__label" for="rsvpCount">참석 인원</label>
-            <input class="rsvp__input" id="rsvpCount" name="count" type="number" min="1" max="99" inputmode="numeric" placeholder="본인 포함 총 인원">
-          </div>
-
-          <div class="rsvp__field">
-            <label class="rsvp__label" for="rsvpCompanion">동행인</label>
-            <input class="rsvp__input" id="rsvpCompanion" name="companion" type="text" placeholder="함께 오시는 분 성함 (선택)" maxlength="60">
-          </div>
-
-          <div class="rsvp__field">
-            <span class="rsvp__label">식사 여부</span>
-            <div class="rsvp__toggle" id="rsvpMeal" role="group" aria-label="식사 여부 선택">
-              <button type="button" class="rsvp__toggle-btn is-active" data-value="예정">예정</button>
-              <button type="button" class="rsvp__toggle-btn" data-value="안함">안함</button>
-              <button type="button" class="rsvp__toggle-btn" data-value="미정">미정</button>
-            </div>
-          </div>
-
-          <label class="rsvp__consent">
-            <input type="checkbox" id="rsvpConsent" class="rsvp__checkbox">
-            <span class="rsvp__consent-text">개인정보 수집 및 이용에 동의합니다 <em>(필수)</em><br>
-              <small>수집 항목: 성함·참석인원·식사여부 · 보유기간: 예식 종료 시까지</small></span>
-          </label>
-
-          <button type="submit" class="rsvp__submit" id="rsvpSubmit">참석 의사 전달하기</button>
-        </form>
+        <div class="rsvp__card animate-item" data-animate="scale-in">
+          <div class="ornament">&#9993;</div>
+          <h2 class="section__title" id="rsvpTitle">참석 의사 전달</h2>
+          <p class="rsvp__desc" id="rsvpDesc"></p>
+          <button type="button" class="rsvp__open-btn" id="rsvpOpenBtn">참석 의사 전달하기</button>
+        </div>
       </div>
     </section>
 

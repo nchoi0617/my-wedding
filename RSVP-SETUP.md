@@ -27,7 +27,7 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName('RSVP') || ss.insertSheet('RSVP');
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['제출시각', '구분', '성함', '참석인원', '동행인', '식사여부', '연락처']);
+      sheet.appendRow(['제출시각', '구분', '성함', '참석인원', '식사여부', '연락처']);
     }
     var p = (e && e.parameter) || {};
     sheet.appendRow([
@@ -35,7 +35,6 @@ function doPost(e) {
       p.side || '',
       p.name || '',
       p.count || '',
-      p.companion || '',
       p.meal || '',
       p.tel || ''
     ]);

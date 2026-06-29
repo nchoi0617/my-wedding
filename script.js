@@ -558,11 +558,34 @@
       return;
     }
 
-    $('#rsvpTitle').textContent = cfg.title || '참석 의사 전달';
-    $('#rsvpDesc').textContent = cfg.desc || '';
+    const title = cfg.title || '참석 의사 전달';
+    const desc = cfg.desc || '';
+    $('#rsvpTitle').textContent = title;
+    $('#rsvpDesc').textContent = desc;
+    $('#rsvpModalTitle').textContent = title;
+    $('#rsvpModalDesc').textContent = desc;
 
     // 연락처 입력란 표시 여부
     if (cfg.askTel) $('#rsvpTelField').hidden = false;
+
+    // 모달 열기/닫기
+    const modal = $('#rsvpModal');
+    const openModal = () => {
+      modal.classList.add('is-open');
+      document.body.classList.add('no-scroll');
+    };
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+      document.body.classList.remove('no-scroll');
+    };
+    $('#rsvpOpenBtn').addEventListener('click', openModal);
+    $('#rsvpModalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
 
     // 토글 그룹 (단일 선택)
     const setupToggle = (groupId) => {
@@ -611,7 +634,6 @@
         side: getToggleValue('rsvpSide'),
         name,
         count,
-        companion: $('#rsvpCompanion').value.trim(),
         meal: getToggleValue('rsvpMeal'),
         tel: cfg.askTel ? $('#rsvpTel').value.trim() : ''
       };
