@@ -27,15 +27,18 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName('RSVP') || ss.insertSheet('RSVP');
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['제출시각', '구분', '성함', '참석인원', '식사여부']);
+      sheet.appendRow(['제출시각', '구분', '참석여부', '성함', '동행인', '동행인수(본인제외)', '식사여부', '전달사항']);
     }
     var p = (e && e.parameter) || {};
     sheet.appendRow([
       new Date(),
       p.side || '',
+      p.attend || '',
       p.name || '',
-      p.count || '',
-      p.meal || ''
+      p.companionName || '',
+      p.companionCount || '',
+      p.meal || '',
+      p.message || ''
     ]);
     return ContentService
       .createTextOutput(JSON.stringify({ result: 'ok' }))
@@ -79,7 +82,9 @@ function doPost(e) {
 
 1. 배포된 청첩장에서 RSVP 폼을 작성해 제출
 2. Google 시트의 `RSVP` 탭에 행이 추가되면 성공 🎉
-3. 참석 인원 합계는 시트에서 `=SUM(D2:D)` 같은 수식으로 집계할 수 있습니다.
+3. 총 참석 인원은 `본인 수 + 동행인 수`로 집계합니다. 빈 셀에 아래 수식을 넣으세요:
+   - 총 참석 인원: `=COUNTIF(C2:C,"참석") + SUM(F2:F)`
+   - 식사 인원(예정): 식사여부 G열이 "예정"인 행 기준으로 별도 집계
 
 ## 자주 묻는 질문
 

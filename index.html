@@ -76,16 +76,29 @@
         </div>
 
         <div class="rsvp__field">
+          <span class="rsvp__label">참석 여부</span>
+          <div class="rsvp__toggle" id="rsvpAttend" role="group" aria-label="참석 여부 선택">
+            <button type="button" class="rsvp__toggle-btn is-active" data-value="참석">참석</button>
+            <button type="button" class="rsvp__toggle-btn" data-value="불참">불참</button>
+          </div>
+        </div>
+
+        <div class="rsvp__field">
           <label class="rsvp__label" for="rsvpName">성함</label>
           <input class="rsvp__input" id="rsvpName" name="name" type="text" placeholder="대표자 성함" autocomplete="name" maxlength="20">
         </div>
 
-        <div class="rsvp__field">
-          <label class="rsvp__label" for="rsvpCount">참석 인원</label>
-          <input class="rsvp__input" id="rsvpCount" name="count" type="number" min="1" max="99" inputmode="numeric" placeholder="본인 포함 총 인원">
+        <div class="rsvp__field" data-attend-only>
+          <label class="rsvp__label" for="rsvpCompanionName">동행인 성함</label>
+          <input class="rsvp__input" id="rsvpCompanionName" name="companionName" type="text" placeholder="함께 오시는 분 (선택)" maxlength="60">
         </div>
 
-        <div class="rsvp__field">
+        <div class="rsvp__field" data-attend-only>
+          <label class="rsvp__label" for="rsvpCompanionCount">동행인 수<small>(본인 제외)</small></label>
+          <input class="rsvp__input" id="rsvpCompanionCount" name="companionCount" type="number" min="0" max="98" inputmode="numeric" placeholder="0">
+        </div>
+
+        <div class="rsvp__field" data-attend-only>
           <span class="rsvp__label">식사 여부</span>
           <div class="rsvp__toggle" id="rsvpMeal" role="group" aria-label="식사 여부 선택">
             <button type="button" class="rsvp__toggle-btn is-active" data-value="예정">예정</button>
@@ -94,10 +107,15 @@
           </div>
         </div>
 
+        <div class="rsvp__field rsvp__field--message">
+          <label class="rsvp__label" for="rsvpMessage">전달사항</label>
+          <textarea class="rsvp__input rsvp__textarea" id="rsvpMessage" name="message" rows="3" placeholder="전하실 말씀이 있다면 남겨주세요 (선택)" maxlength="300"></textarea>
+        </div>
+
         <label class="rsvp__consent">
           <input type="checkbox" id="rsvpConsent" class="rsvp__checkbox">
           <span class="rsvp__consent-text">개인정보 수집 및 이용에 동의합니다 <em>(필수)</em><br>
-            <small>수집 항목: 성함·참석인원·식사여부 · 보유기간: 예식 종료 시까지</small></span>
+            <small>수집 항목: 성함·참석여부·동행인·식사여부·전달사항 · 보유기간: 예식 종료 시까지</small></span>
         </label>
 
         <button type="submit" class="rsvp__submit" id="rsvpSubmit">참석 의사 전달하기</button>

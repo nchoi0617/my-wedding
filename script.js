@@ -105,6 +105,24 @@
   }
 
   /* ═══════════════════════════════════════════
+     Scroll Lock (모달용)
+     ═══════════════════════════════════════════ */
+
+  // body.no-scroll은 position:fixed라 그냥 켜면 스크롤 위치가 사라진다.
+  // 열 때 위치를 저장하고 닫을 때 복원해 같은 지점에 머무르게 한다.
+  let savedScrollY = 0;
+  function lockScroll() {
+    savedScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.classList.add('no-scroll');
+  }
+  function unlockScroll() {
+    document.body.classList.remove('no-scroll');
+    document.body.style.top = '';
+    window.scrollTo(0, savedScrollY);
+  }
+
+  /* ═══════════════════════════════════════════
      OG Meta Tags
      ═══════════════════════════════════════════ */
 
@@ -146,13 +164,13 @@
 
     btn.addEventListener('click', () => {
       curtain.classList.add('is-open');
-      document.body.classList.remove('no-scroll');
+      unlockScroll();
       setTimeout(() => {
         curtain.classList.add('is-hidden');
       }, 1400);
     });
 
-    document.body.classList.add('no-scroll');
+    lockScroll();
   }
 
   /* ═══════════════════════════════════════════
@@ -393,12 +411,12 @@
     modalIndex = index;
     showModalImage();
     $('#photoModal').classList.add('is-open');
-    document.body.classList.add('no-scroll');
+    lockScroll();
   }
 
   function closePhotoModal() {
     $('#photoModal').classList.remove('is-open');
-    document.body.classList.remove('no-scroll');
+    unlockScroll();
   }
 
   function showModalImage() {
@@ -576,11 +594,11 @@
     const modal = $('#rsvpModal');
     const openModal = () => {
       modal.classList.add('is-open');
-      document.body.classList.add('no-scroll');
+      lockScroll();
     };
     const closeModal = () => {
       modal.classList.remove('is-open');
-      document.body.classList.remove('no-scroll');
+      unlockScroll();
     };
     $('#rsvpOpenBtn').addEventListener('click', openModal);
     $('#rsvpModalClose').addEventListener('click', closeModal);
@@ -603,11 +621,23 @@
     };
     setupToggle('rsvpSide');
     setupToggle('rsvpMeal');
+    setupToggle('rsvpAttend');
 
     const getToggleValue = (groupId) => {
       const active = $(`#${groupId} .rsvp__toggle-btn.is-active`);
       return active ? active.dataset.value : '';
     };
+
+    // 참석 여부에 따라 인원/식사 등 참석자 전용 항목 표시·숨김
+    const attendOnlyFields = $$('[data-attend-only]');
+    const updateAttendVisibility = () => {
+      const attending = getToggleValue('rsvpAttend') !== '불참';
+      attendOnlyFields.forEach((el) => { el.hidden = !attending; });
+    };
+    $('#rsvpAttend').addEventListener('click', (e) => {
+      if (e.target.closest('.rsvp__toggle-btn')) updateAttendVisibility();
+    });
+    updateAttendVisibility();
 
     const form = $('#rsvpForm');
     const submitBtn = $('#rsvpSubmit');
@@ -616,17 +646,14 @@
       e.preventDefault();
 
       const name = $('#rsvpName').value.trim();
-      const count = $('#rsvpCount').value.trim();
+      const attend = getToggleValue('rsvpAttend');
+      const attending = attend !== '불참';
+      const companionCount = $('#rsvpCompanionCount').value.trim();
       const consent = $('#rsvpConsent').checked;
 
       if (!name) {
         showToast('성함을 입력해 주세요');
         $('#rsvpName').focus();
-        return;
-      }
-      if (!count || Number(count) < 1) {
-        showToast('참석 인원을 입력해 주세요');
-        $('#rsvpCount').focus();
         return;
       }
       if (!consent) {
@@ -636,9 +663,12 @@
 
       const payload = {
         side: getToggleValue('rsvpSide'),
+        attend,
         name,
-        count,
-        meal: getToggleValue('rsvpMeal')
+        companionName: attending ? $('#rsvpCompanionName').value.trim() : '',
+        companionCount: attending ? (companionCount || '0') : '',
+        meal: attending ? getToggleValue('rsvpMeal') : '',
+        message: $('#rsvpMessage').value.trim()
       };
 
       // 제출 endpoint 미설정 시 안내
@@ -659,7 +689,7 @@
           headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
           body: new URLSearchParams(payload).toString()
         });
-        showRSVPThanks(form);
+        showRSVPThanks(form, attending);
       } catch (err) {
         console.error('[RSVP] 전송 실패', err);
         showToast('전송에 실패했습니다. 잠시 후 다시 시도해 주세요');
@@ -669,13 +699,16 @@
     });
   }
 
-  function showRSVPThanks(form) {
+  function showRSVPThanks(form, attending) {
+    const closing = attending
+      ? '당일 반갑게 맞이하겠습니다.'
+      : '마음 전해주셔서 감사합니다.';
     form.classList.add('is-submitted');
     form.innerHTML = `
       <div class="rsvp__thanks">
         <div class="rsvp__thanks-icon">&#9825;</div>
         소중한 마음 전해주셔서 감사합니다.<br>
-        당일 반갑게 맞이하겠습니다.
+        ${closing}
       </div>
     `;
   }
